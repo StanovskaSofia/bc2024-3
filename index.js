@@ -7,29 +7,31 @@ program
   .option('-d, --display', 'display result in console');
 
 program.parse(process.argv);
-
 const options = program.opts();
 
 if (!options.input) {
-  console.error("Please, specify input file");
-  process.exit(1); 
+  console.error("Please, specify input");
+  process.exit(1);
 }
 
 if (!fs.existsSync(options.input)) {
   console.error("Cannot find input file");
-  process.exit(1); 
+  process.exit(1);
 }
 
-const data = fs.readFileSync(options.input, 'utf-8');
+let data;
+  data = JSON.parse(fs.readFileSync(options.input, 'utf-8'));
 
-if (!options.output && !options.display) {
-  process.exit(0);
-}
+let result = "";
+
+data.forEach(item => {
+  result += `${item.StockCode}-${item.ValCode}-${item.Attraction}\n`;
+});
 
 if (options.display) {
-  console.log(data);
+  console.log(result);
 }
 
 if (options.output) {
-  fs.writeFileSync(options.output, data); 
+  fs.writeFileSync(options.output, result);
 }
